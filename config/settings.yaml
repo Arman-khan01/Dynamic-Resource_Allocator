@@ -1,0 +1,18 @@
+monitor:
+  sample_interval_seconds: 2
+  top_process_limit: 10
+
+thresholds:
+  cpu_percent: 85
+  memory_percent: 90
+  process_cpu_heavy_percent: 10
+  process_memory_heavy_percent: 10
+
+allocator:
+  cooldown_seconds: 30
+  protected_processes:
+    - System
+    - Registry
+    - smss.exe
+    - csrss.exe
+    - wininit.exe
