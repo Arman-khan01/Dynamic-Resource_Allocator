@@ -1,2 +1,5 @@
 psutil
 streamlit
+pandas
+numpy
+plotly
