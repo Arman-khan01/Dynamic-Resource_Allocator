@@ -1,4 +1,4 @@
-# ⚡ Adaptive Resource Allocator
+#  Adaptive Resource Allocator
 
 A sophisticated, data-driven Operating System monitor that preemptively forecasts system load and dynamically allocates hardware resources to prevent bottlenecks. 
 
@@ -6,10 +6,10 @@ A sophisticated, data-driven Operating System monitor that preemptively forecast
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
-## 🧠 Core Concept: Predictive vs. Reactive
+##  Core Concept: Predictive vs. Reactive
 Most resource monitors react *after* a system is already overloaded, which often leads to UI freezes and system stutter. This project implements a **Predictive Allocation Engine**. By utilizing Pandas and NumPy for linear regression over a rolling time-series window, the backend forecasts future CPU load and takes action *before* the hardware hits critical limits.
 
-## ✨ Key Features
+##  Key Features
 * **Predictive Forecasting Engine:** Uses rolling memory buffers and 1st-degree polynomial regression to forecast CPU load 3 seconds into the future.
 * **Intelligent Normalization:** Automatically calculates physical/logical core counts to normalize system metrics to a strict, readable 0-100% scale (eliminating the "1500% CPU" anomaly).
 * **Live Control Center UI:** A responsive Streamlit dashboard featuring real-time Plotly charts tracking both actual and predicted system loads.
@@ -18,7 +18,7 @@ Most resource monitors react *after* a system is already overloaded, which often
 
 ---
 
-## 🚀 Quick Start Guide
+##  Quick Start Guide
 
 ### Prerequisites
 * Python 3.10+
