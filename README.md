@@ -1,31 +1,58 @@
-#  Adaptive Resource Allocator
+# Dynamic Resource Allocator
 
-A sophisticated, data-driven Operating System monitor that preemptively forecasts system load and dynamically allocates hardware resources to prevent bottlenecks. 
+A preemptive system resource monitor that forecasts CPU and memory load to dynamically allocate hardware resources and prevent bottlenecks.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
-##  Core Concept: Predictive vs. Reactive
-Most resource monitors react *after* a system is already overloaded, which often leads to UI freezes and system stutter. This project implements a **Predictive Allocation Engine**. By utilizing Pandas and NumPy for linear regression over a rolling time-series window, the backend forecasts future CPU load and takes action *before* the hardware hits critical limits.
+## Overview
 
-##  Key Features
-* **Predictive Forecasting Engine:** Uses rolling memory buffers and 1st-degree polynomial regression to forecast CPU load 3 seconds into the future.
-* **Intelligent Normalization:** Automatically calculates physical/logical core counts to normalize system metrics to a strict, readable 0-100% scale (eliminating the "1500% CPU" anomaly).
-* **Live Control Center UI:** A responsive Streamlit dashboard featuring real-time Plotly charts tracking both actual and predicted system loads.
-* **Integrated Process Sniper:** Locate memory-hogging processes via the UI and terminate them directly from the browser using OS-level `psutil` commands.
-* **Built-in Stress Testing:** Safely launch background, multi-threaded CPU stress tests directly from the dashboard to watch the predictive engine react in real-time.
+Traditional resource monitors are reactive—they show high usage only after the system is already overloaded, which often results in UI freezes or stuttering. This project takes a predictive approach. By applying linear regression over a rolling time-series window using Pandas and NumPy, the backend forecasts CPU load a few seconds into the future. This allows the system to identify and handle resource-heavy processes before hardware limits are reached.
+
+## Features
+
+* **Predictive load forecasting:** Uses rolling memory buffers and polynomial regression to estimate near-future CPU load.
+* **Metric normalization:** Adjusts system metrics based on physical and logical core counts to maintain a strict 0-100% scale.
+* **Real-time dashboard:** A Streamlit-based UI that provides live Plotly charts for both actual and predicted system loads.
+* **Process management:** Identify memory and CPU-heavy processes from the dashboard and terminate them directly via OS-level `psutil` commands.
+* **Stress testing utility:** Includes a background multi-threaded CPU stress test to verify the predictive engine's responsiveness.
 
 ---
 
-##  Quick Start Guide
+## Setup
 
-### Prerequisites
-* Python 3.10+
+**Prerequisites**
+* Python 3.10 or higher
 * Git
 
-### Installation
+**Installation**
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/YOUR-USERNAME/Adaptive-Resource-Allocator.git](https://github.com/YOUR-USERNAME/Adaptive-Resource-Allocator.git)
-   cd Adaptive-Resource-Allocator
+   git clone https://github.com/Arman-khan01/Dynamic-Resource_Allocator.git
+   cd Dynamic-Resource_Allocator
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Usage
+
+The application consists of two main components that need to run simultaneously: the backend engine and the user interface.
+
+**1. Start the backend monitor**
+Open a terminal in the project directory and start the engine:
+```bash
+python -m src.main
+```
+*(Leave this process running. It continuously monitors the system and logs telemetry data.)*
+
+**2. Start the dashboard**
+Open a separate terminal window in the same directory and launch the UI:
+```bash
+python -m streamlit run dashboard/app.py
+```
+
+The dashboard will automatically open in your default web browser at `http://localhost:8501`.
