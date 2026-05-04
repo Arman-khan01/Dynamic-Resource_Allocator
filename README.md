@@ -6,9 +6,7 @@ A preemptive system resource monitor that forecasts CPU and memory load to dynam
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
-## Overview
 
-Traditional resource monitors are reactive—they show high usage only after the system is already overloaded, which often results in UI freezes or stuttering. This project takes a predictive approach. By applying linear regression over a rolling time-series window using Pandas and NumPy, the backend forecasts CPU load a few seconds into the future. This allows the system to identify and handle resource-heavy processes before hardware limits are reached.
 
 ## Features
 
