@@ -38,6 +38,13 @@ A preemptive system resource monitor that forecasts CPU and memory load to dynam
 
 ## Usage
 
+##For Windows users
+
+Double-click start.bat in the project folder.
+It will set things up, run the backend, and open the dashboard automatically.
+
+### The Manual Way
+
 The application consists of two main components that need to run simultaneously: the backend engine and the user interface.
 
 **1. Start the backend monitor**
