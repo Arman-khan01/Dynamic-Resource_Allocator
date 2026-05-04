@@ -19,3 +19,4 @@ timeout /t 2 /nobreak >nul
 echo [3/3] Starting the Control Center Dashboard...
 :: Run the Streamlit dashboard in this window
 python -m streamlit run dashboard/app.py
+
