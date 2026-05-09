@@ -11,13 +11,12 @@ import psutil
 
 st.set_page_config(page_title="Adaptive Allocator", layout="wide", page_icon="⚙️")
 
-# --- Initialize Session State for Historical Data ---
 if "time_history" not in st.session_state:
-    st.session_state.time_history = deque(maxlen=60) # Keep last 60 seconds
+    st.session_state.time_history = deque(maxlen=60) 
     st.session_state.cpu_history = deque(maxlen=60)
     st.session_state.pred_history = deque(maxlen=60)
 
-# Paths
+
 root = Path(__file__).resolve().parents[1]
 state_file = root / "logs" / "state.json"
 
@@ -30,22 +29,22 @@ def load_state():
             return None
     return None
 
-# --- UI Layout ---
+
 st.title(" Dynamic Resource Allocator Control Center")
 
-# Sidebar Controls
+
 st.sidebar.header("Controls")
 st.sidebar.markdown("*(Note: Changing these currently requires backend restart)*")
 st.sidebar.slider("CPU Danger Threshold", min_value=50, max_value=100, value=85)
 st.sidebar.slider("Memory Danger Threshold", min_value=50, max_value=100, value=90)
 st.sidebar.button("Force Refresh State")
 
-# --- NEW UI CONTROLS ---
+
 st.sidebar.markdown("---")
 st.sidebar.header(" Integrated Stress Test")
 threads = st.sidebar.slider("CPU Threads to Burn", min_value=1, max_value=16, value=14)
 
-# Create two columns for the buttons so they sit side-by-side
+
 col_launch, col_stop = st.sidebar.columns(2)
 
 with col_launch:
@@ -56,11 +55,11 @@ with col_launch:
 with col_stop:
     if st.button("Stop All"):
         killed_count = 0
-        # Iterate through all running computer processes
+       
         for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
             try:
                 cmdline = proc.info.get('cmdline')
-                # If the process is running our stress script, terminate it!
+             
                 if cmdline and 'stress.py' in ' '.join(cmdline):
                     proc.terminate()
                     killed_count += 1
@@ -82,7 +81,6 @@ if st.sidebar.button("Terminate Single Process"):
         st.sidebar.error("Cannot kill System Idle Process!")
     else:
         try:
-            # Tell the Operating System to forcefully kill the target process
             p = psutil.Process(target_pid)
             p.terminate()
             st.sidebar.success(f"Successfully terminated PID {target_pid}!")
@@ -92,7 +90,7 @@ if st.sidebar.button("Terminate Single Process"):
             st.sidebar.error("Access Denied. Some system processes are protected.")
         except Exception as e:
             st.sidebar.error(f"Error: {e}")
-# -----------------------
+
 
 state = load_state()
 
@@ -100,7 +98,7 @@ if not state:
     st.warning("No backend state found. Make sure 'python -m src.main' is running!")
     st.stop()
 
-# --- Top Metric Row ---
+
 system = state.get("system", {})
 actual_cpu = round(system.get("cpu_percent", 0), 1)
 predicted_cpu = state.get("predicted_cpu", actual_cpu)
@@ -112,17 +110,17 @@ col1.metric("Actual CPU", f"{actual_cpu}%")
 col2.metric("Predicted CPU", f"{predicted_cpu:.1f}%", delta=f"{(predicted_cpu - actual_cpu):.1f}%")
 col3.metric("Memory Usage", f"{memory}%")
 
-# Color code the action status
+
 status_color = "normal" if "No action" in last_action else "inverse"
 col4.metric("Last Action", last_action, delta_color=status_color)
 
-# --- Update History ---
+
 timestamp = time.strftime("%H:%M:%S")
 st.session_state.time_history.append(timestamp)
 st.session_state.cpu_history.append(actual_cpu)
 st.session_state.pred_history.append(predicted_cpu)
 
-# --- Live Interactive Chart ---
+
 st.subheader("Live Predictive CPU Monitoring")
 
 fig = go.Figure()
@@ -137,7 +135,6 @@ fig.add_trace(go.Scatter(
     mode='lines', name='Predicted Future (3s)', line=dict(color='#ff9f1c', width=3, dash='dash')
 ))
 
-# Add a horizontal line for the danger threshold
 fig.add_hline(y=85, line_dash="dot", line_color="red", annotation_text="Danger Zone (85%)")
 
 fig.update_layout(
@@ -147,21 +144,20 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-# --- Interactive Process List ---
+
 st.subheader("Top Resource Consumers")
 processes = system.get("top_processes", [])
 
 if processes:
     df = pd.DataFrame(processes)
     
-    # Hide the useless System Idle Process (PID 0)
+    
     df = df[df['pid'] != 0]
     
-    # Normalize the CPU usage to a strict 0-100% scale
     cores = multiprocessing.cpu_count()
     df['cpu_percent'] = (df['cpu_percent'] / cores).round(1)
 
-    # Reorder columns for readability
+    
     df = df[['pid', 'name', 'cpu_percent', 'memory_percent']]
     
     st.dataframe(
@@ -174,7 +170,5 @@ if processes:
         use_container_width=True
     )
 
-# --- Auto-Refresh Logic ---
-# Streamlit will automatically rerun this script every 2 seconds
 time.sleep(2)
 st.rerun()
